@@ -1,0 +1,15 @@
+# Cloudflare tunnel config — update tunnel ID and credentials-file after creating the tunnel
+# Run: cloudflared tunnel create clickup-mcp
+# Then update the tunnel ID and credentials-file path below
+tunnel: REPLACE_WITH_TUNNEL_ID
+credentials-file: /root/.cloudflared/REPLACE_WITH_TUNNEL_ID.json
+origincert: /root/.cloudflared/cert.pem
+
+ingress:
+  - hostname: clickup.ssc.one
+    service: http://localhost:8767
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+      noHappyEyeballs: true
+  - service: http_status:404

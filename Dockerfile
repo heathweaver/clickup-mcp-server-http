@@ -28,11 +28,20 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json .
 COPY --from=builder /app/package-lock.json .
 
+# Copy cloudflared config and credentials
+COPY config.yml /etc/cloudflared/config.yml
+COPY .cloudflare/ /root/.cloudflared/
+
 # Create persistent data directory for OAuth state
 RUN mkdir -p /app/data
 
 # Install production dependencies
 RUN npm ci --omit=dev
+
+# Install cloudflared
+RUN wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -O cloudflared && \
+    chmod +x cloudflared && \
+    mv cloudflared /usr/local/bin/
 
 # Environment variable for the ClickUp API token should be provided at runtime
 # Example: docker run -e CLICKUP_API_TOKEN=your_token_here your-image
@@ -41,8 +50,12 @@ RUN npm ci --omit=dev
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "console.log('OK')" || exit 1
 
+# Copy cloudflared startup script
+COPY cloudflared.sh /usr/local/bin/cloudflared.sh
+RUN chmod +x /usr/local/bin/cloudflared.sh
+
 # Expose the port that the server listens to
 EXPOSE 8767
 
-# Start the node server
-CMD ["node", "dist/index.js"]
+# Start cloudflared (if certs exist) and the node server
+CMD ["/bin/sh", "-c", "/usr/local/bin/cloudflared.sh; node dist/index.js"]

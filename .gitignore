@@ -17,9 +17,9 @@ dist/
 *.pem
 *.cert
 
-# Configuration files with sensitive data
-config.yml
-cloudflared.sh
+# Configuration files with sensitive data (keep templates in repo)
+# config.yml — committed as template with REPLACE_WITH_TUNNEL_ID placeholders
+# cloudflared.sh — committed as generic startup script
 
 # Temporary files
 temp/

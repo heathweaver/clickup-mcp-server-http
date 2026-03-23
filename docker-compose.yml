@@ -8,6 +8,7 @@ services:
       - CLICKUP_API_TOKEN=${CLICKUP_API_TOKEN}
       - MCP_ALLOWED_TOKENS=${MCP_ALLOWED_TOKENS}
     volumes:
+      - cloudflared-certs:/root/.cloudflared
       - oauth-state:/app/data
     restart: unless-stopped
     healthcheck:
@@ -18,4 +19,5 @@ services:
       retries: 3
 
 volumes:
+  cloudflared-certs:
   oauth-state:
