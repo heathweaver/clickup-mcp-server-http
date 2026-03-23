@@ -507,9 +507,9 @@ class ClickUpMCPServer {
   private toolConfigs: ToolConfig[];
 
   constructor() {
-    const CLICKUP_API_TOKEN = process.env.CLICKUP_API_TOKEN;
+    const CLICKUP_API_TOKEN = process.env.CLICKUP_ACCESS_TOKEN || process.env.CLICKUP_API_TOKEN;
     if (!CLICKUP_API_TOKEN) {
-      console.error('Error: CLICKUP_API_TOKEN environment variable is required');
+      console.error('Error: CLICKUP_ACCESS_TOKEN environment variable is required');
       process.exit(1);
     }
     this.clickUpApiToken = CLICKUP_API_TOKEN;
