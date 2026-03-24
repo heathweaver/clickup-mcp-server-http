@@ -1,5 +1,5 @@
-tunnel: fc36bfcb-1381-40ca-b042-d9ed3b0a8724
-credentials-file: /root/.cloudflared/fc36bfcb-1381-40ca-b042-d9ed3b0a8724.json
+tunnel: 6125a727-b977-4809-9470-bcc6b21dc4b0
+credentials-file: /root/.cloudflared/6125a727-b977-4809-9470-bcc6b21dc4b0.json
 origincert: /root/.cloudflared/cert.pem
 
 ingress:

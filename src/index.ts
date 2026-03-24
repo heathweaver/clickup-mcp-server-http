@@ -902,6 +902,21 @@ class ClickUpMCPServer {
         path: args => `/list/${ensureId(args.list_id, 'list_id')}/field`,
         transform: payload => ({ success: true, fields: payload?.fields ?? [] }),
       }),
+      this.createTool({
+        name: 'clickup_get_workspace_custom_fields',
+        description: 'List all custom fields available in a workspace (team).',
+        inputSchema: {
+          type: 'object',
+          required: ['team_id'],
+          additionalProperties: false,
+          properties: {
+            team_id: idSchema('Workspace (team) ID.'),
+          },
+        },
+        method: 'GET',
+        path: args => `/team/${ensureId(args.team_id, 'team_id')}/field`,
+        transform: payload => ({ success: true, fields: payload?.fields ?? [] }),
+      }),
 
       // --- Tags ---
       this.createTool({
@@ -1838,6 +1853,24 @@ class ClickUpMCPServer {
           if (tagBg) tag.tag_bg = tagBg;
           return { tag };
         },
+        transform: () => ({ success: true }),
+      }),
+
+      // --- Add Task to List (multi-homing) ---
+      this.createTool({
+        name: 'clickup_add_task_to_list',
+        description: 'Add an existing task to an additional list (multi-homing). Requires the "Tasks in Multiple Lists" ClickApp to be enabled.',
+        inputSchema: {
+          type: 'object',
+          required: ['list_id', 'task_id'],
+          additionalProperties: false,
+          properties: {
+            list_id: idSchema('List ID to add the task to.'),
+            task_id: idSchema('Task ID to add.'),
+          },
+        },
+        method: 'POST',
+        path: args => `/list/${ensureId(args.list_id, 'list_id')}/task/${ensureId(args.task_id, 'task_id')}`,
         transform: () => ({ success: true }),
       }),
     ];
